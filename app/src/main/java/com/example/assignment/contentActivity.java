@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -131,6 +130,7 @@ public class contentActivity extends AppCompatActivity {
                 InputStreamReader reader2 = new InputStreamReader(inputStream2);
                 if (adapter.getItemCount() > 0) {
                     adapter.removeAll();
+                    adapter.notifyDataSetChanged();
                 }
                 ArrayList<House> houses = search.addToView(editText.getText().toString(), housesInfo, reader2);
                 adapter.addData(houses);

@@ -10,18 +10,20 @@ public class Parsing {
     public static ArrayList<ArrayList<Token>> getTokens(String input, InputStreamReader reader) {
         tokens.clear();
         extractKeywords(input,reader);
+        android.util.Log.e("tokenslist",tokens.get(3).get(0).token());
         return tokens;
     }
 
     public static void extractKeywords(String input, InputStreamReader reader) {
         tokens.clear();
-        MyTokenizer myTokenizer = new MyTokenizer(input);
-        myTokenizer.putKeywords(reader);
+        MyTokenizer myTokenizer = new MyTokenizer(input,reader);
+        android.util.Log.e("judge", myTokenizer.current().token()+'?');
         for (int i=0;i<4;i++) {
             tokens.add(new ArrayList<Token>());
         }
         while (myTokenizer.hasNext()) {
             Token token = myTokenizer.current();
+            android.util.Log.e("token",token.token());
             if (token.type() == Token.Type.PRICE) {
                 if (myTokenizer.hasNext()) {
                     myTokenizer.next();
@@ -109,7 +111,6 @@ public class Parsing {
                                 tokens.get(0).add(putin);
                             }
                         }
-
                     }
                 }
             }

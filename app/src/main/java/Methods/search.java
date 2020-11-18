@@ -56,6 +56,7 @@ public class search {
         string = string.replace("in ","");
         string = string.replace("a ","");
         string = string.replace(",","");
+        string = string.replace("with ","");
         ArrayList<House> allHouse = new ArrayList<>();
         ArrayList<ArrayList<Token>> tokens = getTokens(string,reader);
         for (int l = 1; l <= housesInfo.size(); l++) {
@@ -93,6 +94,7 @@ public class search {
                         break;
                     case 1:
                         for (Token token : tokens.get(i)) {
+                            android.util.Log.e("type", token.token());
                             for (int j = 1; j <= housesInfo.size(); j++) {
                                 if (!Objects.requireNonNull(housesInfo.get(String.valueOf(j))).getType().toLowerCase().equals(token.token())) {
                                     allHouse.remove(housesInfo.get(String.valueOf(j)));

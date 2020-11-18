@@ -38,7 +38,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyHolder
     public void removeAll() {
         this.houses.clear();
         notifyItemRangeRemoved(0, houses.size());
-        notifyItemRangeChanged(0,houses.size());
     }
 
     public void changeState(boolean isScrolling) {

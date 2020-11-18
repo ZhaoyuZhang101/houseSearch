@@ -44,7 +44,8 @@ public class MyTokenizer {
     }
 
 
-    public MyTokenizer(String text) {
+    public MyTokenizer(String text,InputStreamReader reader) {
+        putKeywords(reader);
         _buffer = text;		// save input text (string)
         next();		// extracts the first token.
     }
@@ -63,19 +64,22 @@ public class MyTokenizer {
             while (i < _buffer.length()) {
                 if (containAnyKeyword(word, keywords).length() == 0) {
                     word = word + _buffer.charAt(i);
+                    android.util.Log.e("wo",word);
                     keyword = containAnyKeyword(word, keywords);
                     i++;
                 } else {
-                    if (i<_buffer.length()) {
+                    if (i<_buffer.length()&&keyword.length()!=0) {
                         if (_buffer.charAt(i) == 's') {
-                            keyword = word + 's';
-                        } else {
+                            _buffer = _buffer.substring(0,i)+_buffer.substring(i+1);
                             keyword = containAnyKeyword(word, keywords);
                         }
+                    } else {
+                        keyword = containAnyKeyword(word, keywords);
                     }
                     break;
                 }
             }
+            android.util.Log.e("key",keywords.toString());
 
             int j = 0;
             StringBuilder number = new StringBuilder();
@@ -87,7 +91,6 @@ public class MyTokenizer {
                 }
                 j++;
             }
-            String rest = "" + _buffer;
 
 
             if (number.length() != 0 && containDigit(word)) {
@@ -118,10 +121,7 @@ public class MyTokenizer {
             } else {
                 currentToken = new Token(keyword, Token.Type.NULL);
             }
-
-            int tokenLen = currentToken.token().length();
             _buffer = _buffer.replaceFirst(currentToken.token(), "");
-            rest = rest + _buffer;
         } else {
             currentToken = new Token("", Token.Type.NULL);
         }
