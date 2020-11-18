@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ import java.util.Objects;
 
 import Methods.House;
 import Methods.ReadData;
+import Methods.search;
 
 import static Methods.search.addToView;
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
@@ -91,8 +93,8 @@ public class contentActivity extends AppCompatActivity {
 
     //设置view列表
     public void listView(String content) {
-        final InputStream inputStream = getResources().openRawResource(R.raw.keywords);
-        final InputStreamReader reader = new InputStreamReader(inputStream);
+        InputStream inputStream = getResources().openRawResource(R.raw.keywords);
+        InputStreamReader reader = new InputStreamReader(inputStream);
         final int spanCount = 2;
         final RecyclerView recyclerView = findViewById(R.id.houseInfo);
         final ImageView innerSearch = findViewById(R.id.innerSearch);
@@ -101,7 +103,7 @@ public class contentActivity extends AppCompatActivity {
 
         final StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(spanCount, OrientationHelper.VERTICAL);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getDrawable(R.drawable.loading);
-        final RecycleAdapter adapter = new RecycleAdapter(addToView(content,housesInfo,reader), drawable, pictures());
+        final RecycleAdapter adapter = new RecycleAdapter(search.addToView(content,housesInfo,reader), drawable, pictures());
         myDecoration myDecoration = new myDecoration(20);
         recyclerView.addItemDecoration(myDecoration);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
@@ -125,21 +127,20 @@ public class contentActivity extends AppCompatActivity {
         innerSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputStream inputStream2 = getResources().openRawResource(R.raw.keywords);
+                InputStreamReader reader2 = new InputStreamReader(inputStream2);
                 if (adapter.getItemCount() > 0) {
                     adapter.removeAll();
-                    adapter.notifyDataSetChanged();
                 }
-                adapter.addData(addToView(editText.getText().toString(),housesInfo,reader));
+                ArrayList<House> houses = search.addToView(editText.getText().toString(), housesInfo, reader2);
+                adapter.addData(houses);
             }
         });
         //刷新布局
         refreshLayout.setColorSchemeResources(R.color.blue, R.color.red, R.color.black);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                adapter.notifyDataSetChanged();
-                refreshLayout.setRefreshing(false);
-            }
+        refreshLayout.setOnRefreshListener(() -> {
+            adapter.notifyDataSetChanged();
+            refreshLayout.setRefreshing(false);
         });
     }
 

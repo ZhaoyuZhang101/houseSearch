@@ -16,7 +16,6 @@ public class MyTokenizer {
             BufferedReader bufferedReader = new BufferedReader(reader);
             String line = "";
             while((line = bufferedReader.readLine())!=null) {
-                android.util.Log.e("line" ,line);
                 keywords.add(line);
             }
         } catch (IOException e) {
